@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="11">
+ <editorsettings>
+  <export format="tmx"/>
+ </editorsettings>
+ <tileset firstgid="1" name="images" tilewidth="1567" tileheight="218" tilecount="1" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0">
+   <image width="1567" height="218" source="../zeppelin-image.png"/>
+  </tile>
+ </tileset>
+ <objectgroup id="3" name="Background"/>
+ <objectgroup id="5" name="Midground"/>
+ <objectgroup id="4" name="Foreground">
+  <object id="3" name="zeppelin" x="984" y="1520" width="64" height="64"/>
+  <object id="4" name="player" x="860" y="1528" width="64" height="64"/>
+  <object id="5" name="plane" x="1140" y="1557.33" width="64" height="64"/>
+  <object id="7" x="822.667" y="1606.67">
+   <polygon points="0,0 258.667,-4 262.667,124 18.6667,108"/>
+  </object>
+  <object id="8" x="1520" y="1293.33">
+   <polygon points="0,0 241.333,17.3333 241.333,198.667 2.66667,165.333"/>
+  </object>
+  <object id="9" x="2144" y="1649.33">
+   <polygon points="0,0 380,-13.3333 369.333,202.667 12,204"/>
+  </object>
+  <object id="10" x="2572" y="1128">
+   <polygon points="0,0 6.66667,254.667 1222.79,260.727 1200.12,-11.2727"/>
+  </object>
+ </objectgroup>
+</map>
