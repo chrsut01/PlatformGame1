@@ -49,7 +49,7 @@ public class TileMapHelper {
                 Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
                 String rectangleName = mapObject.getName();
 
-                if (rectangleName.equals("zeppelin")) {
+               /*if (rectangleName.equals("zeppelin")) {
                     Body body = BodyHelperService.createBody(
                             rectangle.getX() + rectangle.getWidth() / 2,
                             rectangle.getY() + rectangle.getHeight() / 2,
@@ -59,7 +59,7 @@ public class TileMapHelper {
                             gameScreen.getWorld()
                     );
                     gameScreen.setPlayer(new Player(body));
-                }
+                }*/
 
                 if (rectangleName.equals("plane")) {
                     Body body = BodyHelperService.createBody(
@@ -72,13 +72,30 @@ public class TileMapHelper {
                     );
                     gameScreen.setPlayer(new Player(body));
                 }
-
-
             }
 
+            if (mapObject instanceof EllipseMapObject) {
+                Ellipse ellipse = ((EllipseMapObject) mapObject).getEllipse();
+                String ellipseName = mapObject.getName();
 
+                if (ellipseName != null && ellipseName.equals("zeppelin")) {
+                    float ellipseX = ellipse.x + ellipse.width / 2;
+                    float ellipseY = ellipse.y + ellipse.height / 2;
+
+                    Body body = BodyHelperService.createBody(
+                            ellipseX,
+                            ellipseY,
+                            ellipse.width,
+                            ellipse.height,
+                            false,
+                            gameScreen.getWorld()
+                    );
+                    gameScreen.setPlayer(new Player(body));
+                }
+            }
 
         }
+
     }
 
         private void createStaticBody (PolygonMapObject polygonMapObject){

@@ -5,28 +5,24 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import static com.mygdx.game.Constants.PPM;
 
-public class Player extends GameEntity {
-    private Texture zeppelinImage;
-    private static final float width = 783/2;
-    private static final float height = 109/2;
-    private final Sprite zeppelinSprite;
+public class Plane extends GameEntity {
+    private Texture planeImage;
+    private static final float width = 94;
+    private static final float height = 72;
+    private final Sprite planeSprite;
 
-    public Player(Body body) {
+    public Plane(Body body) {
         super(width, height, body);
         this.speed = 10f;
 
-        //zeppelinImage = new Texture(Gdx.files.internal("Dirigibile-Zeppelin-L59.png"));
-        zeppelinImage = new Texture("zeppelin-image.png");
-        zeppelinSprite = new Sprite(zeppelinImage);
-        zeppelinSprite.setSize(width, height);
-
+        planeImage = new Texture("sopwith_camel_small.png");
+        planeSprite = new Sprite(planeImage);
+        planeSprite.setSize(width, height);
     }
-
 
     @Override
     public void update() {
@@ -41,13 +37,8 @@ public class Player extends GameEntity {
 
     @Override
     public void render(SpriteBatch batch) {
-        // Convert world coordinates to screen coordinates
-      //  float screenX = x * PPM;
-      //  float screenY = y * PPM;
-
-       // zeppelinSprite.setPosition(screenX, screenY);
-        zeppelinSprite.setPosition(x, y);
-        zeppelinSprite.draw(batch);
+        planeSprite.setPosition(x, y);
+        planeSprite.draw(batch);
     }
 
     // e5
@@ -64,6 +55,6 @@ public class Player extends GameEntity {
     }
 
     public void dispose() {
-        zeppelinImage.dispose();
+        planeImage.dispose();
     }
 }
