@@ -31,7 +31,7 @@ public class Plane extends GameEntity {
         y = body.getPosition().y * PPM;
 
         // e5
-        checkUserInput();
+        //checkUserInput();
     }
 
 
@@ -42,7 +42,7 @@ public class Plane extends GameEntity {
     }
 
     // e5
-    private void checkUserInput() {
+ /*   private void checkUserInput() {
         velY = 0;
         velX = 0.2f;
         if (Gdx.input.isKeyPressed(Input.Keys.UP))
@@ -51,8 +51,8 @@ public class Plane extends GameEntity {
             velY = -1;
 
         //body.setLinearVelocity(body.getLinearVelocity().x, velY * speed);
-        body.setLinearVelocity(velX * speed, velY * speed);
-    }
+        body.setLinearVelocity(velX * speed, velY * speed);  // this is the setLinearVelocity method for Player/zeppelin
+    }*/
 
     public void dispose() {
         planeImage.dispose();

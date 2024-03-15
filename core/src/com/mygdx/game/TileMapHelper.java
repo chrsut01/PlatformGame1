@@ -70,7 +70,7 @@ public class TileMapHelper {
                             false,
                             gameScreen.getWorld()
                     );
-                    gameScreen.setPlayer(new Player(body));
+                    gameScreen.setPlane(new Plane(body));
                 }
             }
 

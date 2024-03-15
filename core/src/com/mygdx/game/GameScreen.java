@@ -6,6 +6,8 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -28,6 +30,7 @@ public class GameScreen extends ScreenAdapter {
     // e4
     // game objects
     private Player player;
+    private Plane plane;
 
     public GameScreen(OrthographicCamera camera) {
         this.camera = camera;
@@ -83,6 +86,25 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin();
 
+        // Iterate through all the map objects
+      /*  for (MapObject mapObject : tileMapHelper.getMap().getLayers().get("objects").getObjects()) {
+            if (mapObject instanceof RectangleMapObject) {
+                RectangleMapObject rectangleMapObject = (RectangleMapObject) mapObject;
+                String objectName = rectangleMapObject.getName();
+
+                // Check if the object is named "plane"
+                if (objectName != null && objectName.equals("plane")) {
+                    // Render the image for this rectangle object
+                    // You may need to adjust the parameters according to your requirements
+                    batch.draw(planeTexture,
+                            rectangleMapObject.getRectangle().x,
+                            rectangleMapObject.getRectangle().y,
+                            rectangleMapObject.getRectangle().width,
+                            rectangleMapObject.getRectangle().height);
+                }
+            }}*/
+
+        plane.render(batch);
         player.render(batch);
 
         batch.end();
@@ -99,5 +121,9 @@ public class GameScreen extends ScreenAdapter {
     public void setPlayer(Player player) {
         this.player = player;
     }
+    public void setPlane(Plane plane) {
+        this.plane = plane;
+    }
+
 
 }
