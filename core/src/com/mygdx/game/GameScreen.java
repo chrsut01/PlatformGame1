@@ -6,6 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -75,8 +76,10 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         this.update();
-        Gdx.gl.glClearColor(0.5f, 0.7f, 0.9f, 0.5f);  // makes screen light blue
-       // Gdx.gl.glClearColor(0,0,0.3f,1);
+        //Gdx.gl.glClearColor(0.5f, 0.7f, 0.9f, 0.5f);  // makes screen light blue
+        Gdx.gl.glClearColor(0, 0, 0, 0);  // makes screen transparent
+
+        // Gdx.gl.glClearColor(0,0,0.3f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Set the view for the TiledMapRenderer
@@ -86,28 +89,11 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin();
 
-        // Iterate through all the map objects
-      /*  for (MapObject mapObject : tileMapHelper.getMap().getLayers().get("objects").getObjects()) {
-            if (mapObject instanceof RectangleMapObject) {
-                RectangleMapObject rectangleMapObject = (RectangleMapObject) mapObject;
-                String objectName = rectangleMapObject.getName();
-
-                // Check if the object is named "plane"
-                if (objectName != null && objectName.equals("plane")) {
-                    // Render the image for this rectangle object
-                    // You may need to adjust the parameters according to your requirements
-                    batch.draw(planeTexture,
-                            rectangleMapObject.getRectangle().x,
-                            rectangleMapObject.getRectangle().y,
-                            rectangleMapObject.getRectangle().width,
-                            rectangleMapObject.getRectangle().height);
-                }
-            }}*/
-
         plane.render(batch);
         player.render(batch);
 
         batch.end();
+
         box2DDebugRenderer.render(world,camera.combined.scl(PPM));
 
     }
@@ -123,6 +109,9 @@ public class GameScreen extends ScreenAdapter {
     }
     public void setPlane(Plane plane) {
         this.plane = plane;
+    }
+    public void drawTexture(TextureRegion textureRegion, float x, float y) {
+        batch.draw(textureRegion, x, y);
     }
 
 

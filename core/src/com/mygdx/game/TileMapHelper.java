@@ -1,11 +1,13 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -29,10 +31,11 @@ public class TileMapHelper {
     }
 
     public OrthogonalTiledMapRenderer setupMap() {
-        //tiledMap = new TmxMapLoader().load("maps/map0.tmx");
         tiledMap = new TmxMapLoader().load("maps3/ZepMap3.tmx");
 
         parseMapObjects(tiledMap.getLayers().get("Foreground").getObjects());
+        parseMapObjects(tiledMap.getLayers().get("Midground").getObjects());
+        parseMapObjects(tiledMap.getLayers().get("Background").getObjects());
         //parseMapObjects(tiledMap.getLayers().get("Tile Layer 1").getObjects());
 
         return new OrthogonalTiledMapRenderer(tiledMap);
@@ -45,21 +48,32 @@ public class TileMapHelper {
                 createStaticBody((PolygonMapObject) mapObject);
             }
 
+            // need some way to check for the (Tile) images in the layers and create the bodies for them
+
+                    if (mapObject instanceof TextureMapObject) {
+                        if (mapObject instanceof TextureMapObject) {
+                            TextureMapObject textureMapObject = (TextureMapObject) mapObject;
+                            TextureRegion textureRegion = textureMapObject.getTextureRegion();
+                            String textureName = mapObject.getName();
+                            float x = textureMapObject.getX();
+                            float y = textureMapObject.getY();
+
+                            // Draw the texture at the specified position
+                            // Here, you would use your game's SpriteBatch to draw the texture
+                            // For example:
+                            // game.getBatch().draw(textureRegion, x, y);
+
+                            if (textureName != null && textureName.startsWith("cloud")) {
+
+                                gameScreen.drawTexture(textureRegion, x, y);
+                            }
+                        }
+                    }
+
+
             if (mapObject instanceof RectangleMapObject) {
                 Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
                 String rectangleName = mapObject.getName();
-
-               /*if (rectangleName.equals("zeppelin")) {
-                    Body body = BodyHelperService.createBody(
-                            rectangle.getX() + rectangle.getWidth() / 2,
-                            rectangle.getY() + rectangle.getHeight() / 2,
-                            rectangle.getWidth(),
-                            rectangle.getHeight(),
-                            false,
-                            gameScreen.getWorld()
-                    );
-                    gameScreen.setPlayer(new Player(body));
-                }*/
 
                 if (rectangleName.equals("plane")) {
                     Body body = BodyHelperService.createBody(
@@ -93,9 +107,7 @@ public class TileMapHelper {
                     gameScreen.setPlayer(new Player(body));
                 }
             }
-
         }
-
     }
 
         private void createStaticBody (PolygonMapObject polygonMapObject){
