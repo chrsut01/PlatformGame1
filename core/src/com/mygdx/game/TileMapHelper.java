@@ -48,29 +48,6 @@ public class TileMapHelper {
                 createStaticBody((PolygonMapObject) mapObject);
             }
 
-            // need some way to check for the (Tile) images in the layers and create the bodies for them
-
-                    if (mapObject instanceof TextureMapObject) {
-                        if (mapObject instanceof TextureMapObject) {
-                            TextureMapObject textureMapObject = (TextureMapObject) mapObject;
-                            TextureRegion textureRegion = textureMapObject.getTextureRegion();
-                            String textureName = mapObject.getName();
-                            float x = textureMapObject.getX();
-                            float y = textureMapObject.getY();
-
-                            // Draw the texture at the specified position
-                            // Here, you would use your game's SpriteBatch to draw the texture
-                            // For example:
-                            // game.getBatch().draw(textureRegion, x, y);
-
-                            if (textureName != null && textureName.startsWith("cloud")) {
-
-                                gameScreen.drawTexture(textureRegion, x, y);
-                            }
-                        }
-                    }
-
-
             if (mapObject instanceof RectangleMapObject) {
                 Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
                 String rectangleName = mapObject.getName();
@@ -107,6 +84,26 @@ public class TileMapHelper {
                     gameScreen.setPlayer(new Player(body));
                 }
             }
+
+            // need some way to check for the (Tile) images in the layers and create the bodies for them
+           /* if (mapObject instanceof TextureMapObject) {
+                TextureMapObject textureMapObject = (TextureMapObject) mapObject;
+                TextureRegion textureRegion = textureMapObject.getTextureRegion();
+                String textureName = mapObject.getName();
+
+                // Draw the texture at the specified position
+                // Here, you would use your game's SpriteBatch to draw the texture
+                // For example:
+                // game.getBatch().draw(textureRegion, x, y);
+
+                if (textureName != null && textureRegion != null && textureName.startsWith("cloud1")) {
+                    float x = textureMapObject.getX();
+                    float y = textureMapObject.getY();
+
+                    gameScreen.drawTexture(textureRegion, x, y);
+                }
+            }*/
+
         }
     }
 

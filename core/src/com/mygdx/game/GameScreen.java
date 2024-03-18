@@ -16,6 +16,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.ArrayList;
+
 import static com.mygdx.game.Constants.PPM;
 
 public class GameScreen extends ScreenAdapter {
@@ -32,6 +34,7 @@ public class GameScreen extends ScreenAdapter {
     // game objects
     private Player player;
     private Plane plane;
+    private ArrayList<Plane> planes = new ArrayList<Plane>();
 
     public GameScreen(OrthographicCamera camera) {
         this.camera = camera;
@@ -89,6 +92,7 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin();
 
+
         plane.render(batch);
         player.render(batch);
 
@@ -113,6 +117,4 @@ public class GameScreen extends ScreenAdapter {
     public void drawTexture(TextureRegion textureRegion, float x, float y) {
         batch.draw(textureRegion, x, y);
     }
-
-
 }

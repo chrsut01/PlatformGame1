@@ -13,7 +13,7 @@ public class Plane extends GameEntity {
     private Texture planeImage;
     private static final float width = 94;
     private static final float height = 72;
-    private final Sprite planeSprite;
+    private Sprite planeSprite;
 
     public Plane(Body body) {
         super(width, height, body);
@@ -41,18 +41,6 @@ public class Plane extends GameEntity {
         planeSprite.draw(batch);
     }
 
-    // e5
- /*   private void checkUserInput() {
-        velY = 0;
-        velX = 0.2f;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP))
-            velY = 1;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            velY = -1;
-
-        //body.setLinearVelocity(body.getLinearVelocity().x, velY * speed);
-        body.setLinearVelocity(velX * speed, velY * speed);  // this is the setLinearVelocity method for Player/zeppelin
-    }*/
 
     public void dispose() {
         planeImage.dispose();
