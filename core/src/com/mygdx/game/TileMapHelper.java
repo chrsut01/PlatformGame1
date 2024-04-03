@@ -48,7 +48,7 @@ public class TileMapHelper {
                 createStaticBody((PolygonMapObject) mapObject);
             }
 
-            if (mapObject instanceof RectangleMapObject) {
+         /*   if (mapObject instanceof RectangleMapObject) {
                 Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
                 String rectangleName = mapObject.getName();
 
@@ -63,7 +63,7 @@ public class TileMapHelper {
                     );
                     gameScreen.setPlane(new Plane(body));
                 }
-            }
+            }*/
 
             if (mapObject instanceof EllipseMapObject) {
                 Ellipse ellipse = ((EllipseMapObject) mapObject).getEllipse();

@@ -93,7 +93,7 @@ public class GameScreen extends ScreenAdapter {
         batch.begin();
 
 
-        plane.render(batch);
+       // plane.render(batch);
         player.render(batch);
 
         batch.end();
