@@ -91,17 +91,17 @@ public class GameScreen extends ScreenAdapter {
         camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2, mapHeight - camera.viewportHeight / 2);
 
 
-      /*  // Ensure the zeppelin stays within the screen bounds
-        if (playerY > camera.position.y - player.getHeight() / 2)
+        // Ensure the zeppelin stays within the screen bounds AND centered on the screen
+      /*  if (playerY > camera.position.y - player.getHeight() / 2)
             playerY = camera.position.y - player.getHeight() /2;
         if (playerY < camera.position.y)
             playerY = camera.position.y;*/
 
 
 
-        // Ensure the player stays within the screen bounds
+        // Ensure the player stays within the screen bounds BUT CAN move to the top and bottom of screen at boundaries of tilemap
         float clampedPlayerX = MathUtils.clamp(playerX, 0, mapWidth);
-        float clampedPlayerY = MathUtils.clamp(playerY, 0, mapHeight);
+        float clampedPlayerY = MathUtils.clamp(playerY, 0, mapHeight - player.getHeight());
 
         // Update the player's position
         player.setPosition(clampedPlayerX, clampedPlayerY);

@@ -25,9 +25,6 @@
   <object id="28" name="cloud3" gid="4" x="2336" y="1232" width="1988" height="1290"/>
  </objectgroup>
  <objectgroup id="4" name="Foreground">
-  <object id="7" x="822.667" y="1606.67">
-   <polygon points="0,0 258.667,-4 470.667,212 18.6667,108"/>
-  </object>
   <object id="15" x="1902.67" y="918.667">
    <polygon points="0,0 258.667,-4 70.6667,200 18.6667,108"/>
   </object>
@@ -39,9 +36,6 @@
   </object>
   <object id="9" x="2144" y="1649.33">
    <polygon points="264,4 380,-13.3333 369.333,202.667 12,204"/>
-  </object>
-  <object id="10" x="2572" y="1128">
-   <polygon points="0,0 6.66667,254.667 603.92,164.015 786.788,256.727 764.121,-15.2727"/>
   </object>
   <object id="17" name="zeppelin" x="576" y="928" width="346.353" height="64">
    <ellipse/>
