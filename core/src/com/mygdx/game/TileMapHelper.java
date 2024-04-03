@@ -48,22 +48,6 @@ public class TileMapHelper {
                 createStaticBody((PolygonMapObject) mapObject);
             }
 
-         /*   if (mapObject instanceof RectangleMapObject) {
-                Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
-                String rectangleName = mapObject.getName();
-
-                if (rectangleName.equals("plane")) {
-                    Body body = BodyHelperService.createBody(
-                            rectangle.getX() + rectangle.getWidth() / 2,
-                            rectangle.getY() + rectangle.getHeight() / 2,
-                            rectangle.getWidth(),
-                            rectangle.getHeight(),
-                            false,
-                            gameScreen.getWorld()
-                    );
-                    gameScreen.setPlane(new Plane(body));
-                }
-            }*/
 
             if (mapObject instanceof EllipseMapObject) {
                 Ellipse ellipse = ((EllipseMapObject) mapObject).getEllipse();
@@ -84,26 +68,6 @@ public class TileMapHelper {
                     gameScreen.setPlayer(new Player(body));
                 }
             }
-
-            // need some way to check for the (Tile) images in the layers and create the bodies for them
-           /* if (mapObject instanceof TextureMapObject) {
-                TextureMapObject textureMapObject = (TextureMapObject) mapObject;
-                TextureRegion textureRegion = textureMapObject.getTextureRegion();
-                String textureName = mapObject.getName();
-
-                // Draw the texture at the specified position
-                // Here, you would use your game's SpriteBatch to draw the texture
-                // For example:
-                // game.getBatch().draw(textureRegion, x, y);
-
-                if (textureName != null && textureRegion != null && textureName.startsWith("cloud1")) {
-                    float x = textureMapObject.getX();
-                    float y = textureMapObject.getY();
-
-                    gameScreen.drawTexture(textureRegion, x, y);
-                }
-            }*/
-
         }
     }
 

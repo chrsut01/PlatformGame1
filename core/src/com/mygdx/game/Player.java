@@ -55,14 +55,29 @@ public class Player extends GameEntity {
         velY = 0;
         velX = 0.2f;
         if (Gdx.input.isKeyPressed(Input.Keys.UP))
-            velY = 1;
+            velY = 0.2f;
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            velY = -1;
+            velY = -0.2f;
 
         //body.setLinearVelocity(body.getLinearVelocity().x, velY * speed);
         body.setLinearVelocity(velX * speed, velY * speed);
     }
 
+    // Method to set the position of the player
+    public void setPosition(float x, float y) {
+        // Assuming you're using Box2D, you'll set the position of the body
+        if (body != null) {
+            body.setTransform(x / Constants.PPM, y / Constants.PPM, body.getAngle());
+        }
+    }
+
+    public float getWidth() {
+        return zeppelinImage.getWidth();
+    }
+
+    public float getHeight() {
+        return zeppelinImage.getHeight();
+    }
     public void dispose() {
         zeppelinImage.dispose();
     }

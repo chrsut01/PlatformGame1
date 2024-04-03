@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -65,15 +66,50 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void cameraUpdate() {
-        // e4
-        Vector3 position = camera.position;
-        position.x = Math.round(player.getBody().getPosition().x * PPM * 10) / 10f;
-        position.y = Math.round(player.getBody().getPosition().y * PPM * 10) / 10f;
-        camera.position.set(position);
-        // slet gml camera.position i næste linje
-        // e4 slut
-        //camera.position.set(new Vector3(0,0,0));  // e1
+        // Get the tilemap dimensions from the GameConfiguration class
+        int mapWidth = GameConfig.TILEMAP_WIDTH;
+        int mapHeight = GameConfig.TILEMAP_HEIGHT;
+
+        // Calculate the maximum camera position based on the tilemap dimensions
+        float maxCameraX = mapWidth - camera.viewportWidth / 2;
+        float maxCameraY = mapHeight - camera.viewportHeight / 2;
+
+        // Get the player's position
+        float playerX = player.getBody().getPosition().x * PPM;
+        float playerY = player.getBody().getPosition().y * PPM;
+
+        // Calculate the target camera position to keep the player centered
+        float targetCameraX = MathUtils.clamp(playerX, camera.viewportWidth / 2, maxCameraX);
+        float targetCameraY = MathUtils.clamp(playerY, camera.viewportHeight / 2, maxCameraY);
+
+
+       // Set the camera at target position and player at center of screen
+        camera.position.set(targetCameraX, targetCameraY, 0);
+
+        // Ensure the camera stays within the tilemap boundaries
+        camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
+        camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2, mapHeight - camera.viewportHeight / 2);
+
+
+      /*  // Ensure the zeppelin stays within the screen bounds
+        if (playerY > camera.position.y - player.getHeight() / 2)
+            playerY = camera.position.y - player.getHeight() /2;
+        if (playerY < camera.position.y)
+            playerY = camera.position.y;*/
+
+
+
+        // Ensure the player stays within the screen bounds
+        float clampedPlayerX = MathUtils.clamp(playerX, 0, mapWidth);
+        float clampedPlayerY = MathUtils.clamp(playerY, 0, mapHeight);
+
+        // Update the player's position
+        player.setPosition(clampedPlayerX, clampedPlayerY);
+
+        // Update the camera position
         camera.update();
+
+
     }
 
     @Override
