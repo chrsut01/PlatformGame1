@@ -34,38 +34,69 @@ public class GameScreen extends ScreenAdapter {
     // e4
     // game objects
     private Player player;
+    private Zeppelin zeppelin;
     private Plane plane;
     private ArrayList<Plane> planes = new ArrayList<Plane>();
 
     public GameScreen(OrthographicCamera camera) {
         this.camera = camera;
         this.batch = new SpriteBatch();
-        //this.world = new World(new Vector2(0,0), false);
-        // e4 i stedet for linjen ovenfor
-        //this.world = new World(new Vector2(0,-9.81f), false);
-        // e5 linje nedenfor
+
+        zeppelin = new Zeppelin();
+
         this.world = new World(new Vector2(0,0), false);         // e5 så hoppes der bedre
         this.box2DDebugRenderer = new Box2DDebugRenderer();
 
         this.tileMapHelper = new TileMapHelper(this);  // e2, e3: parameter
         this.orthogonalTiledMapRenderer = tileMapHelper.setupMap(); // e2
-
+        //setPlayer(player); // e4
     }
 
     private void update() {
         world.step(1/60f,6,2);
+        zeppelin.update();
         cameraUpdate();
 
         batch.setProjectionMatrix(camera.combined);
         orthogonalTiledMapRenderer.setView(camera); // e2
-        player.update(); // e5
+        //player.update(); // e5
+
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
         }
     }
 
-    private void cameraUpdate() {
+    // update camera position for zeppelin
+    private void cameraUpdate(){
+        // Get the tilemap dimensions from the GameConfiguration class
+        int mapWidth = GameConfig.TILEMAP_WIDTH;
+        int mapHeight = GameConfig.TILEMAP_HEIGHT;
+
+        // Calculate the maximum camera position based on the tilemap dimensions
+        float maxCameraX = mapWidth - camera.viewportWidth / 2;
+        float maxCameraY = mapHeight - camera.viewportHeight / 2;
+
+        // Get the Zeppelin's position
+        float zeppelinX = zeppelin.getX(); // Adjust this according to your Zeppelin class
+        float zeppelinY = zeppelin.getY(); // Adjust this according to your Zeppelin class
+
+        // Calculate the target camera position to keep the Zeppelin centered
+        float targetCameraX = MathUtils.clamp(zeppelinX, camera.viewportWidth / 2, maxCameraX);
+        float targetCameraY = MathUtils.clamp(zeppelinY, camera.viewportHeight / 2, maxCameraY);
+
+        // Set the camera at the target position
+        camera.position.set(targetCameraX, targetCameraY, 0);
+
+        // Ensure the camera stays within the tilemap boundaries
+        camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
+        camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2, mapHeight - camera.viewportHeight / 2);
+
+        // Update the camera position
+        camera.update();
+    }
+    // update camera position for player
+/*    private void cameraUpdate() {
         // Get the tilemap dimensions from the GameConfiguration class
         int mapWidth = GameConfig.TILEMAP_WIDTH;
         int mapHeight = GameConfig.TILEMAP_HEIGHT;
@@ -90,14 +121,11 @@ public class GameScreen extends ScreenAdapter {
         camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
         camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2, mapHeight - camera.viewportHeight / 2);
 
-
         // Ensure the zeppelin stays within the screen bounds AND centered on the screen
-      /*  if (playerY > camera.position.y - player.getHeight() / 2)
+        if (playerY > camera.position.y - player.getHeight() / 2)
             playerY = camera.position.y - player.getHeight() /2;
         if (playerY < camera.position.y)
-            playerY = camera.position.y;*/
-
-
+            playerY = camera.position.y;
 
         // Ensure the player stays within the screen bounds BUT CAN move to the top and bottom of screen at boundaries of tilemap
         float clampedPlayerX = MathUtils.clamp(playerX, 0, mapWidth);
@@ -108,9 +136,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Update the camera position
         camera.update();
-
-
-    }
+    }*/
 
     @Override
     public void render(float delta) {
@@ -128,9 +154,9 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin();
 
-
        // plane.render(batch);
-        player.render(batch);
+        //player.render(batch);
+        zeppelin.render(batch);
 
         batch.end();
 

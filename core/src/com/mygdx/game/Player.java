@@ -24,9 +24,7 @@ public class Player extends GameEntity {
         zeppelinImage = new Texture("zeppelin-image.png");
         zeppelinSprite = new Sprite(zeppelinImage);
         zeppelinSprite.setSize(width, height);
-
     }
-
 
     @Override
     public void update() {

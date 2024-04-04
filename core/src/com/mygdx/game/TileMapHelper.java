@@ -49,7 +49,7 @@ public class TileMapHelper {
             }
 
 
-            if (mapObject instanceof EllipseMapObject) {
+         /*   if (mapObject instanceof EllipseMapObject) {
                 Ellipse ellipse = ((EllipseMapObject) mapObject).getEllipse();
                 String ellipseName = mapObject.getName();
 
@@ -67,7 +67,7 @@ public class TileMapHelper {
                     );
                     gameScreen.setPlayer(new Player(body));
                 }
-            }
+            }*/
         }
     }
 
