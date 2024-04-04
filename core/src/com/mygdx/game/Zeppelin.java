@@ -34,10 +34,11 @@ import com.badlogic.gdx.math.MathUtils;
             zeppelinSprite = new Sprite(new Texture(Gdx.files.internal("zeppelin-image.png")));
             engineSound = Gdx.audio.newSound(Gdx.files.internal("ZeppelinEngine.mp3"));
 
-            // Resize the sprite to match the player's dimensions
+            // Resize the sprite to match the zeppelin's dimensions
             zeppelinSprite.setSize(width, height);
 
-            // Set default dimensions and position
+            // Set default dimensions and position zeppelin in center of screen
+            zeppelinSprite.setOrigin(width / 2, height / 2);
             zeppelinSprite.setPosition(GameConfig.SCREEN_WIDTH / 2f - width / 2,
                     GameConfig.SCREEN_HEIGHT / 2f - height / 2);
 
@@ -46,7 +47,6 @@ import com.badlogic.gdx.math.MathUtils;
 
         public void update() {
             handleInput();
-
             zeppelinSprite.translateX(xSpeed * Gdx.graphics.getDeltaTime());
         }
 
@@ -99,6 +99,10 @@ import com.badlogic.gdx.math.MathUtils;
         public void dispose() {
             zeppelinSprite.getTexture().dispose();
             engineSound.dispose();
+        }
+
+        public float getWidth() {
+            return zeppelinSprite.getWidth();
         }
 
         public float getX() {

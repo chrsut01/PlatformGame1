@@ -78,11 +78,11 @@ public class GameScreen extends ScreenAdapter {
         float maxCameraY = mapHeight - camera.viewportHeight / 2;
 
         // Get the Zeppelin's position
-        float zeppelinX = zeppelin.getX(); // Adjust this according to your Zeppelin class
-        float zeppelinY = zeppelin.getY(); // Adjust this according to your Zeppelin class
+        float zeppelinX = zeppelin.getX();
+        float zeppelinY = zeppelin.getY();
 
         // Calculate the target camera position to keep the Zeppelin centered
-        float targetCameraX = MathUtils.clamp(zeppelinX, camera.viewportWidth / 2, maxCameraX);
+        float targetCameraX = MathUtils.clamp(zeppelinX + zeppelin.getWidth() / 2, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
         float targetCameraY = MathUtils.clamp(zeppelinY, camera.viewportHeight / 2, maxCameraY);
 
         // Set the camera at the target position
