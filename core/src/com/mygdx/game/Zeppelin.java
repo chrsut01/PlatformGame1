@@ -84,15 +84,10 @@ import com.badlogic.gdx.math.MathUtils;
             // Ensure speed doesn't drop below a certain threshold to avoid jittering
             if (Math.abs(ySpeed) < MIN_SPEED) ySpeed = 0;
 
-            // Ensure the zeppelin stays within the screen bounds
-            zeppelinSprite.setY(MathUtils.clamp(zeppelinSprite.getY(), 0, GameConfig.SCREEN_HEIGHT - zeppelinSprite.getHeight()));
-
-          /*  // Ensure the zeppelin stays within the screen bounds vertically
+            // Ensure the zeppelin stays within the screen bounds vertically
             float minY = 0;
-            float maxY = GameConfig.SCREEN_HEIGHT - zeppelinSprite.getHeight();
-            zeppelinSprite.setY(MathUtils.clamp(zeppelinSprite.getY(), minY, maxY));*/
-
-
+            float maxY = GameConfig.TILEMAP_HEIGHT - (zeppelinSprite.getHeight() +7);
+            zeppelinSprite.setY(MathUtils.clamp(zeppelinSprite.getY(), minY, maxY));
 
         }
 
@@ -104,7 +99,9 @@ import com.badlogic.gdx.math.MathUtils;
         public float getWidth() {
             return zeppelinSprite.getWidth();
         }
-
+        public float getHeight() {
+            return  zeppelinSprite.getHeight();
+        }
         public float getX() {
             return zeppelinSprite.getX();
         }
@@ -112,5 +109,7 @@ import com.badlogic.gdx.math.MathUtils;
         public float getY() {
             return zeppelinSprite.getY();
         }
+
+
     }
 

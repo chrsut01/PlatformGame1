@@ -83,7 +83,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Calculate the target camera position to keep the Zeppelin centered
         float targetCameraX = MathUtils.clamp(zeppelinX + zeppelin.getWidth() / 2, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
-        float targetCameraY = MathUtils.clamp(zeppelinY, camera.viewportHeight / 2, maxCameraY);
+        float targetCameraY = MathUtils.clamp(zeppelinY + zeppelin.getHeight() / 2, camera.viewportHeight / 2,  mapHeight - camera.viewportHeight / 2);
 
         // Set the camera at the target position
         camera.position.set(targetCameraX, targetCameraY, 0);
@@ -95,48 +95,7 @@ public class GameScreen extends ScreenAdapter {
         // Update the camera position
         camera.update();
     }
-    // update camera position for player
-/*    private void cameraUpdate() {
-        // Get the tilemap dimensions from the GameConfiguration class
-        int mapWidth = GameConfig.TILEMAP_WIDTH;
-        int mapHeight = GameConfig.TILEMAP_HEIGHT;
 
-        // Calculate the maximum camera position based on the tilemap dimensions
-        float maxCameraX = mapWidth - camera.viewportWidth / 2;
-        float maxCameraY = mapHeight - camera.viewportHeight / 2;
-
-        // Get the player's position
-        float playerX = player.getBody().getPosition().x * PPM;
-        float playerY = player.getBody().getPosition().y * PPM;
-
-        // Calculate the target camera position to keep the player centered
-        float targetCameraX = MathUtils.clamp(playerX, camera.viewportWidth / 2, maxCameraX);
-        float targetCameraY = MathUtils.clamp(playerY, camera.viewportHeight / 2, maxCameraY);
-
-
-       // Set the camera at target position and player at center of screen
-        camera.position.set(targetCameraX, targetCameraY, 0);
-
-        // Ensure the camera stays within the tilemap boundaries
-        camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
-        camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2, mapHeight - camera.viewportHeight / 2);
-
-        // Ensure the zeppelin stays within the screen bounds AND centered on the screen
-        if (playerY > camera.position.y - player.getHeight() / 2)
-            playerY = camera.position.y - player.getHeight() /2;
-        if (playerY < camera.position.y)
-            playerY = camera.position.y;
-
-        // Ensure the player stays within the screen bounds BUT CAN move to the top and bottom of screen at boundaries of tilemap
-        float clampedPlayerX = MathUtils.clamp(playerX, 0, mapWidth);
-        float clampedPlayerY = MathUtils.clamp(playerY, 0, mapHeight - player.getHeight());
-
-        // Update the player's position
-        player.setPosition(clampedPlayerX, clampedPlayerY);
-
-        // Update the camera position
-        camera.update();
-    }*/
 
     @Override
     public void render(float delta) {
@@ -155,7 +114,6 @@ public class GameScreen extends ScreenAdapter {
         batch.begin();
 
        // plane.render(batch);
-        //player.render(batch);
         zeppelin.render(batch);
 
         batch.end();
