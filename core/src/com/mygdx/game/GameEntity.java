@@ -25,6 +25,7 @@ public abstract class GameEntity {
 
     public abstract void render(SpriteBatch batch);
 
+    public abstract Body createBody();
     public Body getBody() {
         return body;
     }
