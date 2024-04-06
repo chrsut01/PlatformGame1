@@ -17,7 +17,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static com.badlogic.gdx.graphics.g3d.particles.ParticleChannels.TextureRegion;
 import static com.badlogic.gdx.math.MathUtils.random;
 import static com.mygdx.game.Constants.PPM;
 
@@ -42,8 +41,8 @@ public class GameScreen extends ScreenAdapter {
 
     private Zeppelin zeppelin;
     //private Plane plane;
-    private Plane1 plane1;
-    private ArrayList<Plane1> planes1;
+    private Plane plane;
+    private ArrayList<Plane> planes;
     Body planeBody;
 
 
@@ -55,7 +54,7 @@ public class GameScreen extends ScreenAdapter {
         this.batch = new SpriteBatch();
 
         zeppelin = new Zeppelin();
-        planes1 = new ArrayList<>();
+        planes = new ArrayList<>();
         random = new Random();
         planeSpawnTimer = random.nextFloat() * (MAX_PLANE_SPAWN_TIME - MIN_PLANE_SPAWN_TIME) + MIN_PLANE_SPAWN_TIME;
 
@@ -83,11 +82,11 @@ public class GameScreen extends ScreenAdapter {
         }
 
         if (TimeUtils.timeSinceMillis(lastPlaneTime) > 4000)
-            spawnPlane1();
+            spawnplane();
 
         // Update and render existing planes
-        for (Plane1 plane1 : planes1) {
-            plane1.updatePosition(delta);
+        for (Plane plane : planes) {
+            plane.updatePosition(delta);
 
         }
     }
@@ -104,8 +103,8 @@ public class GameScreen extends ScreenAdapter {
 
         batch.begin();
 
-        for (Plane1 plane1 : planes1) {
-            plane1.render(batch);
+        for (Plane plane : planes) {
+            plane.render(batch);
         }
 
         zeppelin.render(batch);
@@ -144,7 +143,7 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
     }
 
-    private void spawnPlane1() {
+    private void spawnplane() {
         float x = camera.position.x + camera.viewportWidth / 2;
         float minY = camera.position.y - camera.viewportHeight / 2;
         float maxY = camera.position.y + camera.viewportHeight / 2;
@@ -162,16 +161,16 @@ public class GameScreen extends ScreenAdapter {
            // yAngle = -random.nextInt(60); // Generate a negative yAngle
             yAngle = -random(MIN_Y_ANGLE, MAX_Y_ANGLE);
         }
-        plane1 = new Plane1(x, y, yAngle);
-        plane1.planeFlyingSound.play();
-        planes1.add(plane1);
+        plane = new Plane(x, y, yAngle);
+        plane.planeFlyingSound.play();
+        planes.add(plane);
 
         float randomSpawnDelay = MathUtils.random(0.5f, 4f); // Adjust the range as needed
         lastPlaneTime = TimeUtils.millis() + (long) (randomSpawnDelay * 1000);
 
         System.out.println("lastPlaneTime = " + lastPlaneTime);
         System.out.println("middleY = " + middleY);
-        System.out.println("yAngle = " + plane1.getyAngle());
+        System.out.println("yAngle = " + plane.getyAngle());
 
     }
 
