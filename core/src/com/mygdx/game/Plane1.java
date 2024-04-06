@@ -12,13 +12,14 @@ public class Plane1 {
     Sound planeFlyingSound;
     public static final int width = 44;
     public static final int height = 44;
-    private static float x = GameConfig.SCREEN_WIDTH;
+    //private static float x = GameConfig.SCREEN_WIDTH;
+    private float x;
     private float y;
     private int yAngle;
     private final Sprite planeSprite;
 
 
-    public Plane1(float y, int yAngle) {
+    public Plane1(float x, float y, int yAngle) {
         this.x = x;
         this.y = y;
         this.yAngle = yAngle;
@@ -41,7 +42,7 @@ public class Plane1 {
 
     public void updatePosition(float deltaTime) {
         y += yAngle * deltaTime;
-        x -= 20 * deltaTime;
+        x -= 100 * deltaTime;
     }
 
     public void render (SpriteBatch batch) {
