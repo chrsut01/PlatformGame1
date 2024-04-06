@@ -29,24 +29,19 @@ public class GameScreen extends ScreenAdapter {
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
 
-    private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;  // e2
-    private TileMapHelper tileMapHelper; // e2
+    private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
+    private TileMapHelper tileMapHelper;
 
     long lastPlaneTime;
     float planeSpawnTimer;
 
-    public static final float MIN_PLANE_SPAWN_TIME = 0.05f;
-    public static final float MAX_PLANE_SPAWN_TIME = 1f;
+    public static final float MIN_PLANE_SPAWN_TIME = 0.2f;
+    public static final float MAX_PLANE_SPAWN_TIME = 10f;
 
 
     private Zeppelin zeppelin;
-    //private Plane plane;
     private Plane plane;
     private ArrayList<Plane> planes;
-    Body planeBody;
-
-
-
 
 
     public GameScreen(OrthographicCamera camera) {
@@ -56,16 +51,12 @@ public class GameScreen extends ScreenAdapter {
         zeppelin = new Zeppelin();
         planes = new ArrayList<>();
         random = new Random();
-        planeSpawnTimer = random.nextFloat() * (MAX_PLANE_SPAWN_TIME - MIN_PLANE_SPAWN_TIME) + MIN_PLANE_SPAWN_TIME;
 
-      //  this.planeSpawnTimer = random(MIN_PLANE_SPAWN_TIME, MAX_PLANE_SPAWN_TIME);
-
-
-        this.world = new World(new Vector2(0,0), false);         // e5 så hoppes der bedre
+        this.world = new World(new Vector2(0,0), false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
 
-        this.tileMapHelper = new TileMapHelper(this);  // e2, e3: parameter
-        this.orthogonalTiledMapRenderer = tileMapHelper.setupMap(); // e2
+        this.tileMapHelper = new TileMapHelper(this);
+        this.orthogonalTiledMapRenderer = tileMapHelper.setupMap();
 
     }
 
@@ -81,13 +72,17 @@ public class GameScreen extends ScreenAdapter {
             Gdx.app.exit();
         }
 
-        if (TimeUtils.timeSinceMillis(lastPlaneTime) > 4000)
-            spawnplane();
+        // Check if it's time to spawn a plane
+        if (TimeUtils.timeSinceMillis(lastPlaneTime) > planeSpawnTimer) {
+            spawnPlane();
+            // Generate a new random spawn delay
+            planeSpawnTimer = MathUtils.random(MIN_PLANE_SPAWN_TIME * 1000, MAX_PLANE_SPAWN_TIME * 1000);
+            // Update the last plane spawn time
+            lastPlaneTime = TimeUtils.millis();
+        }
 
-        // Update and render existing planes
         for (Plane plane : planes) {
             plane.updatePosition(delta);
-
         }
     }
     @Override
@@ -96,10 +91,9 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 0);  // makes screen transparent
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Set the view for the TiledMapRenderer
         orthogonalTiledMapRenderer.setView(camera);
 
-        orthogonalTiledMapRenderer.render(); // e2
+        orthogonalTiledMapRenderer.render();
 
         batch.begin();
 
@@ -114,17 +108,15 @@ public class GameScreen extends ScreenAdapter {
         box2DDebugRenderer.render(world,camera.combined.scl(PPM));
 
     }
-    // update camera position for zeppelin
+
     private void cameraUpdate(){
-        // Get the tilemap dimensions from the GameConfiguration class
         int mapWidth = GameConfig.TILEMAP_WIDTH;
         int mapHeight = GameConfig.TILEMAP_HEIGHT;
 
         // Calculate the maximum camera position based on the tilemap dimensions
-        float maxCameraX = mapWidth - camera.viewportWidth / 2;
-        float maxCameraY = mapHeight - camera.viewportHeight / 2;
+      //  float maxCameraX = mapWidth - camera.viewportWidth / 2;
+      //  float maxCameraY = mapHeight - camera.viewportHeight / 2;
 
-        // Get the Zeppelin's position
         float zeppelinX = zeppelin.getX();
         float zeppelinY = zeppelin.getY();
 
@@ -132,18 +124,16 @@ public class GameScreen extends ScreenAdapter {
         float targetCameraX = MathUtils.clamp(zeppelinX + zeppelin.getWidth() / 2, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
         float targetCameraY = MathUtils.clamp(zeppelinY + zeppelin.getHeight() / 2, camera.viewportHeight / 2,  mapHeight - camera.viewportHeight / 2);
 
-        // Set the camera at the target position
         camera.position.set(targetCameraX, targetCameraY, 0);
 
         // Ensure the camera stays within the tilemap boundaries
         camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
         camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2, mapHeight - camera.viewportHeight / 2);
 
-        // Update the camera position
         camera.update();
     }
 
-    private void spawnplane() {
+    private void spawnPlane() {
         float x = camera.position.x + camera.viewportWidth / 2;
         float minY = camera.position.y - camera.viewportHeight / 2;
         float maxY = camera.position.y + camera.viewportHeight / 2;
@@ -153,35 +143,18 @@ public class GameScreen extends ScreenAdapter {
         // Determine the yAngle based on the relative position of the plane to the middle of the screen
         int yAngle;
         if (y < middleY) {
-            // Plane starts above the middle of the screen
-          //  yAngle = random.nextInt(60); // Generate a positive yAngle
-            yAngle = random(MIN_Y_ANGLE, MAX_Y_ANGLE);
+            yAngle = random(MIN_Y_ANGLE, MAX_Y_ANGLE);  // Plane starts above the middle of the screen
         } else {
-            // Plane starts below or at the middle of the screen
-           // yAngle = -random.nextInt(60); // Generate a negative yAngle
-            yAngle = -random(MIN_Y_ANGLE, MAX_Y_ANGLE);
+            yAngle = -random(MIN_Y_ANGLE, MAX_Y_ANGLE); // Plane starts below or at the middle of the screen
         }
         plane = new Plane(x, y, yAngle);
         plane.planeFlyingSound.play();
         planes.add(plane);
-
-        float randomSpawnDelay = MathUtils.random(0.5f, 4f); // Adjust the range as needed
-        lastPlaneTime = TimeUtils.millis() + (long) (randomSpawnDelay * 1000);
-
-        System.out.println("lastPlaneTime = " + lastPlaneTime);
-        System.out.println("middleY = " + middleY);
-        System.out.println("yAngle = " + plane.getyAngle());
-
     }
 
-
-
-
-    // e3
     public World getWorld() {
         return world;
     }
-
 
 
    /* public void drawTexture(TextureRegion textureRegion, float x, float y) {
