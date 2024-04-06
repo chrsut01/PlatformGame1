@@ -12,9 +12,9 @@ import com.badlogic.gdx.math.MathUtils;
     public class Zeppelin {
         private static final float width = 783/2;
         private static final float height = 109/2;
-        private static final float MAX_SPEED = 200; // Maximum speed of the zeppelin
-        private static final float ACCELERATION = 5; // Acceleration factor
-        private static final float DECELERATION = 5; // Deceleration factor
+        private static final float MAX_SPEED = 80; // Maximum speed of the zeppelin
+        private static final float ACCELERATION = 55f; // Acceleration factor
+        private static final float DECELERATION = 10f; // Deceleration factor
         private static final float MIN_SPEED = 1; // Minimum speed before stopping
 
 
@@ -56,17 +56,16 @@ import com.badlogic.gdx.math.MathUtils;
 
         public void playEngineSound(float volume) {
             engineSound.loop(volume);
-            // You can add more parameters for pitch, pan, etc., based on your requirements.
         }
 
         private void handleInput() {
             // Handle user input for zeppelin movement
             if (Gdx.input.isKeyPressed(Input.Keys.UP))
-              //  ySpeed += ACCELERATION * Gdx.graphics.getDeltaTime();
-                ySpeed += 100 * Gdx.graphics.getDeltaTime();
+                ySpeed += ACCELERATION * Gdx.graphics.getDeltaTime();
+               // ySpeed += 100 * Gdx.graphics.getDeltaTime();
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-               // ySpeed -= ACCELERATION * Gdx.graphics.getDeltaTime();
-                ySpeed -= 100 * Gdx.graphics.getDeltaTime();
+                ySpeed -= ACCELERATION * Gdx.graphics.getDeltaTime();
+               // ySpeed -= 100 * Gdx.graphics.getDeltaTime();
             if (!Gdx.input.isKeyPressed(Input.Keys.UP) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
                 if (ySpeed > 0)
                     ySpeed -= DECELERATION * Gdx.graphics.getDeltaTime();
@@ -79,7 +78,6 @@ import com.badlogic.gdx.math.MathUtils;
 
             // Apply position update based on speed
             zeppelinSprite.translateY(ySpeed * Gdx.graphics.getDeltaTime());
-          //  y += ySpeed * Gdx.graphics.getDeltaTime();
 
             // Ensure speed doesn't drop below a certain threshold to avoid jittering
             if (Math.abs(ySpeed) < MIN_SPEED) ySpeed = 0;
@@ -88,7 +86,6 @@ import com.badlogic.gdx.math.MathUtils;
             float minY = 0;
             float maxY = GameConfig.TILEMAP_HEIGHT - (zeppelinSprite.getHeight() +7);
             zeppelinSprite.setY(MathUtils.clamp(zeppelinSprite.getY(), minY, maxY));
-
         }
 
         public void dispose() {
