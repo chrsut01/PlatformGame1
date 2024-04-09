@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.MathUtils;
         private static final float height = 109/2;
         private static final float MAX_SPEED = 80; // Maximum speed of the zeppelin
         private static final float ACCELERATION = 55f; // Acceleration factor
-        private static final float DECELERATION = 10f; // Deceleration factor
+        private static final float DECELERATION = 20f; // Deceleration factor
         private static final float MIN_SPEED = 1; // Minimum speed before stopping
 
 
@@ -85,6 +85,12 @@ import com.badlogic.gdx.math.MathUtils;
             // Ensure the zeppelin stays within the screen bounds vertically
             float minY = 0;
             float maxY = GameConfig.TILEMAP_HEIGHT - (zeppelinSprite.getHeight() +7);
+
+            // Check if the zeppelin is at the top of the screen and reduce ySpeed to change direction more naturally
+            if (zeppelinSprite.getY() == maxY && ySpeed > 0) {
+                ySpeed -= ACCELERATION * Gdx.graphics.getDeltaTime();
+            }
+            // Keep the zeppelin within the screen bounds
             zeppelinSprite.setY(MathUtils.clamp(zeppelinSprite.getY(), minY, maxY));
         }
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -38,6 +39,10 @@ public class GameScreen extends ScreenAdapter {
     public static final float MIN_PLANE_SPAWN_TIME = 0.2f;
     public static final float MAX_PLANE_SPAWN_TIME = 10f;
 
+    private Texture mapImage;
+   // private float mapImageSize; // 309 x 499
+    private float mapWidth;
+    private float mapHeight;
 
     private Zeppelin zeppelin;
     private Plane plane;
@@ -57,6 +62,17 @@ public class GameScreen extends ScreenAdapter {
 
         this.tileMapHelper = new TileMapHelper(this);
         this.orthogonalTiledMapRenderer = tileMapHelper.setupMap();
+
+        this.mapImage = new Texture("map-to-afrika.png");
+
+        // Calculate the maximum size based on the desired maximum width or height
+        mapHeight = Gdx.graphics.getHeight() * 0.3f;
+
+        float aspectRatio = (float) mapImage.getHeight() / (float) mapImage.getWidth();
+
+        // Calculate the scaling factor based on the maximum width or height
+        mapWidth = mapHeight / aspectRatio;
+
 
     }
 
@@ -102,6 +118,12 @@ public class GameScreen extends ScreenAdapter {
         }
 
         zeppelin.render(batch);
+
+        // Draw the map at the bottom left corner of the screen
+        float mapX = camera.position.x - camera.viewportWidth / 2 + 20;
+        float mapY = camera.position.y - camera.viewportHeight / 2 + 20;
+        batch.draw(mapImage, mapX, mapY, mapWidth, mapHeight);
+
 
         batch.end();
 
