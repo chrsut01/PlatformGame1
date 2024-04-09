@@ -39,14 +39,22 @@ public class GameScreen extends ScreenAdapter {
     public static final float MIN_PLANE_SPAWN_TIME = 0.2f;
     public static final float MAX_PLANE_SPAWN_TIME = 10f;
 
+    long lastStormCloudTime;
+    float stormCloudSpawnTimer;
+    public static final float MIN_StormCloud_SPAWN_TIME = 15f;
+    public static final float MAX_StormCloud_SPAWN_TIME = 20f;
+
     private Texture mapImage;
-   // private float mapImageSize; // 309 x 499
+
     private float mapWidth;
     private float mapHeight;
 
     private Zeppelin zeppelin;
     private Plane plane;
+    private StormCloud stormCloud;
     private ArrayList<Plane> planes;
+
+    private ArrayList<StormCloud> stormClouds;
 
 
     public GameScreen(OrthographicCamera camera) {
@@ -55,6 +63,7 @@ public class GameScreen extends ScreenAdapter {
 
         zeppelin = new Zeppelin();
         planes = new ArrayList<>();
+        stormClouds = new ArrayList<>();
         random = new Random();
 
         this.world = new World(new Vector2(0,0), false);
@@ -72,8 +81,6 @@ public class GameScreen extends ScreenAdapter {
 
         // Calculate the scaling factor based on the maximum width or height
         mapWidth = mapHeight / aspectRatio;
-
-
     }
 
     private void update(float delta) {
@@ -100,6 +107,19 @@ public class GameScreen extends ScreenAdapter {
         for (Plane plane : planes) {
             plane.updatePosition(delta);
         }
+
+        // Check if it's time to spawn a cloud
+        if (TimeUtils.timeSinceMillis(lastStormCloudTime) > stormCloudSpawnTimer) {
+            spawnStormCloud();
+            // Generate a new random spawn delay
+            stormCloudSpawnTimer = MathUtils.random(MIN_StormCloud_SPAWN_TIME * 1000, MAX_StormCloud_SPAWN_TIME * 1000);
+            // Update the last storm cloud spawn time
+            lastStormCloudTime = TimeUtils.millis();
+        }
+
+        for (StormCloud stormCloud : stormClouds) {
+            stormCloud.updatePosition(delta);
+        }
     }
     @Override
     public void render(float delta) {
@@ -119,11 +139,14 @@ public class GameScreen extends ScreenAdapter {
 
         zeppelin.render(batch);
 
+        for (StormCloud stormCloud : stormClouds) {
+            stormCloud.render(batch);
+        }
+
         // Draw the map at the bottom left corner of the screen
         float mapX = camera.position.x - camera.viewportWidth / 2 + 20;
         float mapY = camera.position.y - camera.viewportHeight / 2 + 20;
         batch.draw(mapImage, mapX, mapY, mapWidth, mapHeight);
-
 
         batch.end();
 
@@ -172,6 +195,16 @@ public class GameScreen extends ScreenAdapter {
         plane = new Plane(x, y, yAngle);
         plane.planeFlyingSound.play();
         planes.add(plane);
+    }
+
+    private void spawnStormCloud() {
+        float x = camera.position.x + camera.viewportWidth / 2;
+        float minY = camera.viewportHeight;
+        float maxY = GameConfig.TILEMAP_HEIGHT - camera.viewportHeight;
+        float y = MathUtils.random(minY, maxY);
+
+        stormCloud = new StormCloud(x, y);
+        stormClouds.add(stormCloud);
     }
 
     public World getWorld() {

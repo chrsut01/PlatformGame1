@@ -113,6 +113,9 @@ import com.badlogic.gdx.math.MathUtils;
             return zeppelinSprite.getY();
         }
 
+      /*  public getPosition() {
+            return zeppelinSprite.getX(), zeppelinSprite.getY();
+        }*/
 
     }
 
