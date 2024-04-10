@@ -61,6 +61,7 @@ public class GameScreen extends ScreenAdapter {
     private Zeppelin zeppelin;
     private Plane plane;
     private StormCloud stormCloud;
+
     private ArrayList<Plane> planes;
 
     private ArrayList<StormCloud> stormClouds;
@@ -99,6 +100,7 @@ public class GameScreen extends ScreenAdapter {
     private void update(float delta) {
         world.step(1/60f,6,2);
         zeppelin.update();
+        dilemma.update();
         cameraUpdate();
 
         batch.setProjectionMatrix(camera.combined);
