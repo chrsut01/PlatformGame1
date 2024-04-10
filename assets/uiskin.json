@@ -1,0 +1,17 @@
+{
+  "com.badlogic.gdx.graphics.Color": {
+    "white": "#ffffff",
+    "black": "#000000",
+    "red": "#ff0000"
+  },
+  "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "default-font": { "file": "default-font.fnt" }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+    "default": {
+      "font": "default-font",
+      "up": "button-up",
+      "down": "button-down"
+    }
+  }
+}

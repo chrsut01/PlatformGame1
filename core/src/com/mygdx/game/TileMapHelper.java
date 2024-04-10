@@ -12,17 +12,23 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 
 import static com.mygdx.game.Constants.PPM;
 
 public class TileMapHelper {
 
+    private DilemmaScreen dilemma;
+    private Stage stage;
     private TiledMap tiledMap;
     private GameScreen gameScreen;
 
@@ -44,18 +50,62 @@ public class TileMapHelper {
     private void parseMapObjects(MapObjects mapObjects) {
         for (MapObject mapObject : mapObjects) {
 
-            if (mapObject instanceof PolygonMapObject) {
+               if (mapObject instanceof PolygonMapObject) {
                 createStaticBody((PolygonMapObject) mapObject);
+
+                   Polygon polygon = ((PolygonMapObject) mapObject).getPolygon();
+                   String polygonName = mapObject.getName();
+
+                   if (polygonName != null && polygonName.equals("dilemma1")) {
+                       // method for initializing the dilemma class and adding it to the game screen
+
+                        // Initialize the dilemma object
+                       dilemma = new DilemmaScreen();
+
+                       // Add the dilemma object to the stage for rendering
+                       dilemma.addToStage(new Actor());
+
+                       // Assuming you want to start rendering the dilemma object immediately
+                     //  dilemma.show();
+                   }
+            }
+            if (mapObject instanceof RectangleMapObject) {
+                createStaticRectangleBody((RectangleMapObject) mapObject);
+
+                Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
+                String rectangleName = mapObject.getName();
+
+                if (rectangleName != null && rectangleName.equals("dilemma1")) {
+                    // method for initializing the dilemma class and adding it to the game screen
+
+                    // Initialize the dilemma object
+                    dilemma = new DilemmaScreen();
+
+                    // Add the dilemma object to the stage for rendering
+                    dilemma.addToStage(new Actor());
+
+                    // Assuming you want to start rendering the dilemma object immediately
+                    //  dilemma.show();
+                }
             }
 
 
-         /*   if (mapObject instanceof EllipseMapObject) {
-                Ellipse ellipse = ((EllipseMapObject) mapObject).getEllipse();
-                String ellipseName = mapObject.getName();
+         /*   if (mapObject instanceof RectangleMapObject){
+                createStaticBody((RectangleMapObject) mapObject);
+                Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
+                String rectangleName = mapObject.getName();
 
-                if (ellipseName != null && ellipseName.equals("zeppelin")) {
-                    float ellipseX = ellipse.x + ellipse.width / 2;
-                    float ellipseY = ellipse.y + ellipse.height / 2;
+                if (rectangleName != null && rectangleName.equals("dilemma1")) {
+
+            }*/
+
+          /*  if (mapObject instanceof RectangleMapObject) {
+                Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
+                String rectangleName = mapObject.getName();
+
+                if (rectangleName != null && rectangleName.equals("zeppelin")) {
+                    float ellipseX = rectangle.x + rectangle.width / 2;
+                    float ellipseY = rectangle.y + rectangle.height / 2;
 
                     Body body = BodyHelperService.createBody(
                             ellipseX,
@@ -66,10 +116,33 @@ public class TileMapHelper {
                             gameScreen.getWorld()
                     );
                     gameScreen.setPlayer(new Player(body));
-                }
-            }*/
+                }*/
+            }
         }
+
+    private void createStaticRectangleBody (RectangleMapObject rectangleMapObject){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        Body body = gameScreen.getWorld().createBody(bodyDef);
+        Shape shape = createRectangleShape(rectangleMapObject);
+        body.createFixture(shape, 1000);
+        shape.dispose();
     }
+    private Shape createRectangleShape(RectangleMapObject rectangleMapObject) {
+        Rectangle rectangle = rectangleMapObject.getRectangle();
+        float x = rectangle.x / PPM;
+        float y = rectangle.y / PPM;
+        float width = rectangle.width / PPM;
+        float height = rectangle.height / PPM;
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width / 2, height / 2, new Vector2(x + width / 2, y + height / 2), 0);
+        return shape;
+    }
+
+
+
+
 
         private void createStaticBody (PolygonMapObject polygonMapObject){
             BodyDef bodyDef = new BodyDef();
@@ -92,4 +165,36 @@ public class TileMapHelper {
             return shape;
         }
 
+
+    public Array<RectangleMapObject> getDilemmaObjects() {
+        Array<RectangleMapObject> dilemmaObjects = new Array<>();
+
+        MapObjects mapObjects = tiledMap.getLayers().get("Foreground").getObjects();
+        for (MapObject mapObject : mapObjects) {
+            if (mapObject instanceof RectangleMapObject) {
+                dilemmaObjects.add((RectangleMapObject) mapObject);
+            }
+        }
+
+        return dilemmaObjects;
+    }
+
+
+    public Object getMap() {
+        return tiledMap;
+    }
+
+    public Rectangle getDilemmaRectangle() {
+        Rectangle dilemmaRectangle = new Rectangle();
+        MapObjects mapObjects = tiledMap.getLayers().get("Foreground").getObjects();
+        for (MapObject mapObject : mapObjects) {
+            if (mapObject instanceof RectangleMapObject) {
+                RectangleMapObject rectangleMapObject = (RectangleMapObject) mapObject;
+                if (rectangleMapObject.getName().equals("dilemma1")) {
+                    dilemmaRectangle = rectangleMapObject.getRectangle();
+                }
+            }
+        }
+        return dilemmaRectangle;
+    }
 }

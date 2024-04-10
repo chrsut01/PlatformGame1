@@ -6,10 +6,12 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 
 
-    public class Zeppelin {
+public class Zeppelin extends Rectangle {
         private static final float width = 783/2;
         private static final float height = 109/2;
         private static final float MAX_SPEED = 80; // Maximum speed of the zeppelin
@@ -19,7 +21,7 @@ import com.badlogic.gdx.math.MathUtils;
 
 
         private float ySpeed = 0;
-        private float xSpeed = 30;
+        private float xSpeed = 80;
 
 
         private Sprite zeppelinSprite;
@@ -112,6 +114,11 @@ import com.badlogic.gdx.math.MathUtils;
         public float getY() {
             return zeppelinSprite.getY();
         }
+
+    public Rectangle getBoundingRectangle() {
+            return new Rectangle(zeppelinSprite.getX(), zeppelinSprite.getY(), zeppelinSprite.getWidth(), zeppelinSprite.getHeight());
+
+    }
 
       /*  public getPosition() {
             return zeppelinSprite.getX(), zeppelinSprite.getY();

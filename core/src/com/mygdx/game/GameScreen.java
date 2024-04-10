@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -7,12 +8,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -23,6 +29,9 @@ import static com.mygdx.game.Constants.PPM;
 
 public class GameScreen extends ScreenAdapter {
 
+  //  private TriggerObject triggerObject;
+    private DilemmaScreen dilemma;
+    private boolean dilemmaTriggered;
     private static final int MIN_Y_ANGLE = 0;
     private static final int MAX_Y_ANGLE = 60;
     private OrthographicCamera camera;
@@ -39,10 +48,10 @@ public class GameScreen extends ScreenAdapter {
     public static final float MIN_PLANE_SPAWN_TIME = 0.2f;
     public static final float MAX_PLANE_SPAWN_TIME = 10f;
 
-    long lastStormCloudTime;
+    long lastStormCloudTime = TimeUtils.millis() + (long) (MIN_StormCloud_SPAWN_TIME * 1000);
     float stormCloudSpawnTimer;
-    public static final float MIN_StormCloud_SPAWN_TIME = 15f;
-    public static final float MAX_StormCloud_SPAWN_TIME = 20f;
+    public static final float MIN_StormCloud_SPAWN_TIME = 20f;
+    public static final float MAX_StormCloud_SPAWN_TIME = 50f;
 
     private Texture mapImage;
 
@@ -65,6 +74,10 @@ public class GameScreen extends ScreenAdapter {
         planes = new ArrayList<>();
         stormClouds = new ArrayList<>();
         random = new Random();
+
+       // triggerObject = new TriggerObject();
+        dilemma = new DilemmaScreen();
+        dilemmaTriggered = false;
 
         this.world = new World(new Vector2(0,0), false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
@@ -120,6 +133,25 @@ public class GameScreen extends ScreenAdapter {
         for (StormCloud stormCloud : stormClouds) {
             stormCloud.updatePosition(delta);
         }
+
+        // Check if zeppelin reaches x value 900
+        if (zeppelin.getX() >= 750) {
+            if (!dilemmaTriggered) {
+
+                // Initialize the dilemma object
+                dilemma = new DilemmaScreen();
+
+                // Add the dilemma object to the stage for rendering
+                dilemma.addToStage(new Actor());
+
+                ((Game) Gdx.app.getApplicationListener()).setScreen(dilemma);
+
+                // Show the dilemma screen
+                dilemma.showDilemmaScreen();
+
+                dilemmaTriggered = true; // Mark dilemma as triggered to prevent repeated triggering
+            }
+        }
     }
     @Override
     public void render(float delta) {
@@ -148,68 +180,117 @@ public class GameScreen extends ScreenAdapter {
         float mapY = camera.position.y - camera.viewportHeight / 2 + 20;
         batch.draw(mapImage, mapX, mapY, mapWidth, mapHeight);
 
+
+        // Check for collision between player and trigger object
+        if (zeppelin.overlaps(tileMapHelper.getDilemmaRectangle())) {
+            System.out.println("Collision dilemma detected!");
+            if (!dilemmaTriggered) {
+                // Initialize the dilemma object
+                dilemma = new DilemmaScreen();
+
+                // Add the dilemma object to the stage for rendering
+                dilemma.addToStage(new Actor());
+
+                // Show the dilemma screen
+                dilemma.showDilemmaScreen();
+
+                // Show the dilemma screen if not already triggered
+                showDilemmaScreen();
+                dilemmaTriggered = true; // Mark dilemma as triggered to prevent repeated triggering
+            }
+        }
+
+
         batch.end();
 
-        box2DDebugRenderer.render(world,camera.combined.scl(PPM));
+        box2DDebugRenderer.render(world, camera.combined.scl(PPM));
 
+        // Check for collision between player and polygon objects
+      /*  for (RectangleMapObject mapObject : tileMapHelper.getDilemmaObjects()) {
+            Rectangle rectangle = mapObject.getRectangle();
+            String polygonName = mapObject.getName();
+
+            if (zeppelin.getBoundingRectangle().overlaps(tileMapHelper.getDilemmaRectangle())) {
+                if (!dilemmaTriggered) {
+                    // Initialize the dilemma object
+                    dilemma = new DilemmaScreen();
+
+                    // Add the dilemma object to the stage for rendering
+                    dilemma.addToStage(new Actor());
+
+                    // Show the dilemma screen
+                    dilemma.showDilemmaScreen();
+
+                    dilemmaTriggered = true; // Mark dilemma as triggered to prevent repeated triggering
+                }
+            }
+        }*/
     }
+        private void cameraUpdate() {
+            int mapWidth = GameConfig.TILEMAP_WIDTH;
+            int mapHeight = GameConfig.TILEMAP_HEIGHT;
 
-    private void cameraUpdate(){
-        int mapWidth = GameConfig.TILEMAP_WIDTH;
-        int mapHeight = GameConfig.TILEMAP_HEIGHT;
+            // Calculate the maximum camera position based on the tilemap dimensions
+            //  float maxCameraX = mapWidth - camera.viewportWidth / 2;
+            //  float maxCameraY = mapHeight - camera.viewportHeight / 2;
 
-        // Calculate the maximum camera position based on the tilemap dimensions
-      //  float maxCameraX = mapWidth - camera.viewportWidth / 2;
-      //  float maxCameraY = mapHeight - camera.viewportHeight / 2;
+            float zeppelinX = zeppelin.getX();
+            float zeppelinY = zeppelin.getY();
 
-        float zeppelinX = zeppelin.getX();
-        float zeppelinY = zeppelin.getY();
+            // Calculate the target camera position to keep the Zeppelin centered
+            float targetCameraX = MathUtils.clamp(zeppelinX + zeppelin.getWidth() / 2, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
+            float targetCameraY = MathUtils.clamp(zeppelinY + zeppelin.getHeight() / 2, camera.viewportHeight / 2, mapHeight - camera.viewportHeight / 2);
 
-        // Calculate the target camera position to keep the Zeppelin centered
-        float targetCameraX = MathUtils.clamp(zeppelinX + zeppelin.getWidth() / 2, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
-        float targetCameraY = MathUtils.clamp(zeppelinY + zeppelin.getHeight() / 2, camera.viewportHeight / 2,  mapHeight - camera.viewportHeight / 2);
+            camera.position.set(targetCameraX, targetCameraY, 0);
 
-        camera.position.set(targetCameraX, targetCameraY, 0);
+            // Ensure the camera stays within the tilemap boundaries
+            camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
+            camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2, mapHeight - camera.viewportHeight / 2);
 
-        // Ensure the camera stays within the tilemap boundaries
-        camera.position.x = MathUtils.clamp(camera.position.x, camera.viewportWidth / 2, mapWidth - camera.viewportWidth / 2);
-        camera.position.y = MathUtils.clamp(camera.position.y, camera.viewportHeight / 2, mapHeight - camera.viewportHeight / 2);
-
-        camera.update();
-    }
-
-    private void spawnPlane() {
-        float x = camera.position.x + camera.viewportWidth / 2;
-        float minY = camera.position.y - camera.viewportHeight / 2;
-        float maxY = camera.position.y + camera.viewportHeight / 2;
-        float y = MathUtils.random(minY + (camera.viewportHeight / 4), maxY - (camera.viewportHeight / 4)); // Adjusted y-coordinate range
-        float middleY = camera.position.y; // Calculate the middle of the screen
-
-        // Determine the yAngle based on the relative position of the plane to the middle of the screen
-        int yAngle;
-        if (y < middleY) {
-            yAngle = random(MIN_Y_ANGLE, MAX_Y_ANGLE);  // Plane starts above the middle of the screen
-        } else {
-            yAngle = -random(MIN_Y_ANGLE, MAX_Y_ANGLE); // Plane starts below or at the middle of the screen
+            camera.update();
         }
-        plane = new Plane(x, y, yAngle);
-        plane.planeFlyingSound.play();
-        planes.add(plane);
-    }
 
-    private void spawnStormCloud() {
-        float x = camera.position.x + camera.viewportWidth / 2;
-        float minY = camera.viewportHeight;
-        float maxY = GameConfig.TILEMAP_HEIGHT - camera.viewportHeight;
-        float y = MathUtils.random(minY, maxY);
+        private void spawnPlane () {
+            float x = camera.position.x + camera.viewportWidth / 2;
+            float minY = camera.position.y - camera.viewportHeight / 2;
+            float maxY = camera.position.y + camera.viewportHeight / 2;
+            float y = MathUtils.random(minY + (camera.viewportHeight / 4), maxY - (camera.viewportHeight / 4)); // Adjusted y-coordinate range
+            float middleY = camera.position.y; // Calculate the middle of the screen
 
-        stormCloud = new StormCloud(x, y);
-        stormClouds.add(stormCloud);
-    }
+            // Determine the yAngle based on the relative position of the plane to the middle of the screen
+            int yAngle;
+            if (y < middleY) {
+                yAngle = random(MIN_Y_ANGLE, MAX_Y_ANGLE);  // Plane starts above the middle of the screen
+            } else {
+                yAngle = -random(MIN_Y_ANGLE, MAX_Y_ANGLE); // Plane starts below or at the middle of the screen
+            }
+            plane = new Plane(x, y, yAngle);
+            plane.planeFlyingSound.play();
+            planes.add(plane);
+        }
 
-    public World getWorld() {
-        return world;
-    }
+        private void spawnStormCloud () {
+            float x = camera.position.x + camera.viewportWidth / 2;
+            float minY = camera.viewportHeight * 2;
+            float maxY = GameConfig.TILEMAP_HEIGHT - camera.viewportHeight * 3;
+            float y = MathUtils.random(minY, maxY);
+
+            stormCloud = new StormCloud(x, y);
+            stormClouds.add(stormCloud);
+        }
+
+        private void showDilemmaScreen () {
+            // Switch to dilemma screen or show the popup
+            // Example:
+            // ((Game) Gdx.app.getApplicationListener()).setScreen(dilemmaScreen);
+            // Or handle dilemma within the game screen
+             dilemma.showDilemmaScreen();
+        }
+
+
+        public World getWorld () {
+            return world;
+        }
 
 
    /* public void drawTexture(TextureRegion textureRegion, float x, float y) {
