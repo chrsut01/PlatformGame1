@@ -137,7 +137,7 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // Check if zeppelin reaches x value 900
-        if (zeppelin.getX() >= 1750) {
+        if (zeppelin.getX() >= 4000) {
             if (!dilemmaTriggered) {
 
                 // Initialize the dilemma object
