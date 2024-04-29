@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="30" tilewidth="64" tileheight="64" infinite="0" nextlayerid="8" nextobjectid="36">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="30" tilewidth="64" tileheight="64" infinite="1" nextlayerid="8" nextobjectid="39">
  <tileset firstgid="1" name="images" tilewidth="1988" tileheight="1290" tilecount="3" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="0">
@@ -24,10 +24,5 @@
   <object id="27" name="cloud2" gid="4" x="1648" y="2144" width="1988" height="1290"/>
   <object id="28" name="cloud3" gid="4" x="2336" y="1232" width="1988" height="1290"/>
  </objectgroup>
- <objectgroup id="4" name="Foreground">
-  <object id="34" name="dilemma2" x="2064" y="16">
-   <polygon points="0,0 -16,1840 144,1824"/>
-  </object>
-  <object id="35" name="dilemma1" x="1616" y="-16" width="176" height="1920"/>
- </objectgroup>
+ <objectgroup id="4" name="Foreground" visible="0"/>
 </map>

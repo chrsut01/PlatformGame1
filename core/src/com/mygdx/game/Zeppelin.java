@@ -42,7 +42,7 @@ public class Zeppelin extends Rectangle {
             // Set default dimensions and position zeppelin in center of screen
             zeppelinSprite.setOrigin(width / 2, height / 2);
             zeppelinSprite.setPosition(GameConfig.SCREEN_WIDTH / 2f - width / 2,
-                    GameConfig.SCREEN_HEIGHT / 2f - height / 2);
+                    GameConfig.SCREEN_HEIGHT / 2f - height / 2 + 500);
 
             playEngineSound(2.2f); // Set the initial volume (you can change this value)
         }

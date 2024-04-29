@@ -65,8 +65,6 @@ public class TileMapHelper {
                        // Add the dilemma object to the stage for rendering
                        dilemma.addToStage(new Actor());
 
-                       // Assuming you want to start rendering the dilemma object immediately
-                     //  dilemma.show();
                    }
             }
             if (mapObject instanceof RectangleMapObject) {
@@ -84,8 +82,6 @@ public class TileMapHelper {
                     // Add the dilemma object to the stage for rendering
                     dilemma.addToStage(new Actor());
 
-                    // Assuming you want to start rendering the dilemma object immediately
-                    //  dilemma.show();
                 }
             }
 

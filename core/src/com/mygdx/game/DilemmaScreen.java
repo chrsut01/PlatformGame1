@@ -18,7 +18,11 @@ public class DilemmaScreen extends ScreenAdapter {
     private Stage stage;
     private TextButton option1Button;
     private TextButton option2Button;
+    private TextButton square;
+    private TextureRegionDrawable background;
+    private Skin skin;
     private boolean gamePaused;
+    private boolean buttonClicked;
 
     public DilemmaScreen() {
         stage = new Stage(new ScreenViewport());
@@ -26,17 +30,18 @@ public class DilemmaScreen extends ScreenAdapter {
 
         createUI(); // Create buttons when the dilemma screen is initialized
         gamePaused = true;
+        buttonClicked = false;
     }
 
     private void createUI() {
         // Create a skin
-        Skin skin = new Skin();
+        skin = new Skin();
 
         // Create a bitmap font for text
         BitmapFont font = new BitmapFont();
 
         // Define the background texture region for the square
-        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("background.png")))); // Replace "background.png" with your desired texture
+        background = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("background.png")))); // Replace "background.png" with your desired texture
 
         // Create a button style for the square
         TextButton.TextButtonStyle squareStyle = new TextButton.TextButtonStyle();
@@ -44,7 +49,7 @@ public class DilemmaScreen extends ScreenAdapter {
         squareStyle.font = font;
 
         // Create a button for the square
-        TextButton square = new TextButton("The ship is on fire!\nWhat do you do?", squareStyle);
+        square = new TextButton("DILEMMA 1 \n Question", squareStyle);
         square.setSize(400, 400);
         square.setPosition(Gdx.graphics.getWidth() / 2f - 200, Gdx.graphics.getHeight() / 2f - 200);
 
@@ -53,8 +58,8 @@ public class DilemmaScreen extends ScreenAdapter {
 
         // Calculate button positions relative to the square
         float buttonX = square.getX() + 100; // Adjust the X position as needed
-        float option1Y = square.getY() + 250; // Adjust the Y position as needed
-        float option2Y = square.getY() + 150; // Adjust the Y position as needed
+        float option1Y = square.getY() + 100; // Adjust the Y position as needed
+        float option2Y = square.getY() + 50; // Adjust the Y position as needed
 
         // Create button style
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
@@ -67,11 +72,14 @@ public class DilemmaScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Handle option 1 choice
+                buttonClicked = true;
                 gamePaused = false;
-                // Resume game
-                ResumeGameFunction();
+                dispose();
                 // Dispose of the screen
                 DisposeFunction();
+                // Resume game
+                ResumeGameFunction();
+
             }
         });
 
@@ -82,97 +90,22 @@ public class DilemmaScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Option 2 clicked");
                 // Handle option 2 choice
+                buttonClicked = true;
                 gamePaused = false;
-                // Resume game;
-                ResumeGameFunction();
+
+                dispose();
                 //  Dispose of the screen
-                DisposeFunction();
-            }
-        });
-
-        stage.addActor(option1Button);
-        stage.addActor(option2Button);
-    }
-
-
-
-
-
-      /*  Skin skin = new Skin();
-       // BitmapFont font = new BitmapFont(Gdx.files.internal("path/to/font.fnt")); // Load your font file
-       // skin.add("default-font", font);
-
-        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.font = skin.getFont("default-font");
-        buttonStyle.fontColor = Color.BLACK; // Set the font color
-
-        skin.add("default", buttonStyle);
-
-        option2Button = new TextButton("Option 2", skin);
-        option2Button.setPosition(300, 200);
-        stage.addActor(option2Button); // Add the button to the stage
+             //   DisposeFunction();
+            /*    // Resume game;
+                ResumeGameFunction();
 */
-
-     /*   Skin skin = new Skin(); // Create a new skin
-        BitmapFont font = new BitmapFont(); // Create a new font
-
-        // Define the background texture region for the square
-        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("background.png")))); // Replace "background.png" with your desired texture
-
-        // Create a button style for the square
-        TextButton.TextButtonStyle squareStyle = new TextButton.TextButtonStyle();
-        squareStyle.up = background;
-
-        // Create a button for the square
-        TextButton square = new TextButton("The ship is on fire!\nWhat do you do?", squareStyle);
-        square.setSize(400, 400);
-        square.setPosition(Gdx.graphics.getWidth() / 2f - 200, Gdx.graphics.getHeight() / 2f - 200);
-
-        // Add the square to the stage
-        stage.addActor(square);
-
-        // Create button style
-        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.font = font;
-        skin.add("default", buttonStyle);
-
-        option1Button = new TextButton("Option 1", skin);
-        option1Button.setPosition(300, 300);
-        option1Button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // Handle option 1 choice
-                gamePaused = false;
-                // Resume game
-                 ResumeGameFunction();
-                // Dispose of the screen
-                 DisposeFunction();
-            }
-        });
-
-        option2Button = new TextButton("Option 2", skin);
-        option2Button.setPosition(300, 200);
-        option2Button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Option 2 clicked");
-                // Handle option 2 choice
-                gamePaused = false;
-                // Resume game;
-                 ResumeGameFunction();
-               //  Dispose of the screen
-                 DisposeFunction();
             }
         });
 
         stage.addActor(option1Button);
         stage.addActor(option2Button);
-    }*/
-
-    private void DisposeFunction() {
-        // Dispose of the screen
-        dispose();
     }
+
 
     private void ResumeGameFunction() {
         // Resume the game
@@ -182,14 +115,8 @@ public class DilemmaScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         update();
-        // Render the stage
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
-        // Debug output for click listeners
-        if (Gdx.input.justTouched()) {
-            System.out.println("Click at: " + Gdx.input.getX() + ", " + Gdx.input.getY());
-        }
     }
 
     @Override
@@ -205,8 +132,16 @@ public class DilemmaScreen extends ScreenAdapter {
         gamePaused = true;
     }
 
+    private void DisposeFunction() {
+        // Dispose of the screen
+        dispose();
+    }
     @Override
     public void dispose() {
+        background.getRegion().getTexture().dispose();
+        square.clear();
+        option1Button.clear();
+        option2Button.clear();
         stage.dispose();
     }
 
@@ -221,8 +156,22 @@ public class DilemmaScreen extends ScreenAdapter {
     public void update(){
         stage.act();
     }
+
+    public boolean isButtonClicked() {
+        return buttonClicked;
+    }
+
+    public int getSelectedOption() {
+        if (option1Button.isChecked()) {
+            return 1;
+        } else if (option2Button.isChecked()) {
+            return 2;
+        } else {
+            return 0;
+        }
+    }
+
+    public void setButtonClicked(boolean b) {
+        buttonClicked = b;
+    }
 }
-
-
-
-

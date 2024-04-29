@@ -10,8 +10,8 @@ public class StormCloud extends Rectangle {
     private Vector2 position;
     private Texture stormCloudImage;
     private float radius;
-    private float width = 3364 * 0.3f; // 3364 (orig pixels)
-    private float height = 1564 * 0.3f; //1564 (orig pixels)
+    private float width = 3364 * 0.4f; // 3364 (orig pixels)
+    private float height = 1564 * 0.4f; //1564 (orig pixels)
 
     private final Sprite stormCloudSprite;
 
@@ -32,7 +32,7 @@ public class StormCloud extends Rectangle {
     }
 
     public void updatePosition(float deltaTime){
-        x -= 40 * deltaTime;
+        x -= 50 * deltaTime;
     }
 
   /*  public boolean isZeppelinNear(Zeppelin zeppelin) {
